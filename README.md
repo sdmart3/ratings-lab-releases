@@ -46,7 +46,7 @@ proof the roll responds to the multiplier, not as a rate).
 README.md                    this file
 USER-GUIDE.md                a walkthrough: install, play, tag, compare, what-if, curves
 CHANGELOG.md                 what changed
-LICENSE, NOTICE              private use terms
+NOTICE                       what is and is not included
 Manual install\Plugins\      the plugin: copy everything in it into your Mod Manager's Plugins folder (over a 0.4.x install, same names)
 Ratings Lab\                 the app and viewer (double-click ratings-lab.cmd; roll-tracer.cmd still works)
 ```
@@ -206,4 +206,4 @@ own data (player ids, ratings, play results), not your account details.
 ## Use it at your own risk
 
 The plugin patches the game's code in memory to read its rolls, like other Mod Manager plugins. Use it for offline play and testing
-only, never in online modes. See LICENSE: private use, no redistribution or sale, no warranty.
+only, never in online modes.
