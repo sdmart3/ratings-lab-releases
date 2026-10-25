@@ -27,7 +27,7 @@ before you trust a number, and use it for offline play only.
 
 The screenshots show real logs. In the runs and card pictures the mod titles are replaced by "Example mod N" and the log folder shown
 is an example. The card compares three stock games with one game played with the fumbles, catching, holding, offside and false-start
-sliders at 0: every fumble check then rolls against a chance of 1.0 and every contact fumbles (15 of 15), against 7.5% in stock.
+sliders at 0: every contact fumbles (15 of 15), against 7.5% in stock. That game ran with a gameplay-slider mod installed, so the size of the effect is that mod's; the direction (Fumbles = ball security) is general.
 
 ## What it does
 
@@ -172,24 +172,34 @@ baseline for the games you compare, so your numbers are comparable between your 
 
 ## What the real games proved about sliders
 
-Ten real games (Simulation, Heisman, sliders set to 0 or 100 one group at a time, 1-minute quarters) were compared with stock games.
-Where the slider moved a roll's threshold by an exact factor in both directions it is **PROVEN**; where only one side or only draw
-counts showed it, it is **LIKELY**. The Modder's map carries all of this; here are the plain-words versions.
+Ten real games (Simulation, Heisman, sliders set to 0 or 100 one group at a time) were compared with stock games. Where the slider
+moved a roll's threshold by an exact factor in both directions it is **PROVEN**; where only one side or only draw counts showed it,
+it is **LIKELY**. The Modder's map carries all of this. Read the table for the **direction and the mechanism** (which slider feeds
+which roll); that holds on any install.
 
-| slider | what it does | status |
+**Caution on the numbers.** The test games ran with a gameplay-slider mod installed, and that mod replaces the game's slider curves.
+Every magnitude below (the x factors, the exact 0 and 1.0 values) was measured with that mod installed; stock values differ.
+
+| slider | direction and mechanism | status |
 |---|---|---|
-| **Fumbles** | **Ball security: higher means FEWER fumbles.** At 0 every fumble check uses a chance of exactly 1.0 (15 of 15 contacts fumbled); at 100 the chance is exactly 0 (0 of 16). Stock sits between. | PROVEN |
-| **Holding** | Scales both holding kinds of the contact-foul roll: about x0.01 at 0, about x5.9 at 100. | PROVEN |
-| **Clipping** | The block-in-the-back foul: chance 0 at 0, 1.0 (the cap) at 100. | PROVEN |
-| **Face mask / Defensive pass interference** | One foul kind of the same roll: x0.009 at 0, x7.8 at 100. The two sliders were set together, so which of them it is was not separated. | PROVEN for the pair |
+| **Fumbles** | **Ball security: higher means FEWER fumbles.** It blends the fumble chance toward 1 at 0 and toward 0 at 100. Measured with the slider mod: at 0 every contact fumbled (15 of 15), at 100 none did (0 of 16). | PROVEN |
+| **Holding** | Higher means more holding calls. It scales both holding kinds (offense and defense) of the contact-foul roll. Measured with the slider mod: about x0.009 at 0, about x5.9 at 100. | PROVEN |
+| **Clipping** | Higher means more block-in-the-back calls (that kind of the contact-foul roll). Measured with the slider mod: chance 0 at 0, 1.0 (the cap) at 100. | PROVEN |
+| **Face mask** | Higher means more face mask calls (one kind of the contact-foul roll). Measured with the slider mod: about x0.009 at 0, x7.8 at 100. Defensive pass interference is a separate kind and was not seen rolling. | PROVEN |
 | **Defensive holding** | Moves nothing. Defensive holding follows the Holding slider. | PROVEN no effect |
-| **Pass defense reaction time** | Multiplies the defender's break-on-ball chance: x0.5 at 0, x1.5 at 100. Values in between were not measured. | PROVEN |
-| WR catching | At 0 the catch roll's chance drops (mean 0.98 to 0.75). The 100 side could not be read. | LIKELY |
-| QB accuracy | At 0 about 77% of passes come out inaccurate against about 32% in stock; at 100 about 9%. | LIKELY |
-| Tackling | At 0 the pile-break chance jumps from about 0.02 to 0.5-0.7. The 100 side had one roll. | LIKELY |
+| **Pass defense reaction time** | Higher means the defender breaks on the ball more often (it multiplies that chance). Measured with the slider mod: x0.5 at 0, x1.5 at 100; values in between were not measured. | PROVEN |
+| WR catching | Lower means a lower catch chance (at 0 the catch roll's mean fell from 0.98 to 0.75). The 100 side could not be read. | LIKELY |
+| QB accuracy | Higher means more accurate passes (at 0 about 77% came out inaccurate against about 32% in stock; at 100 about 9%). | LIKELY |
+| Tackling | Lower means more pile-break chance (at 0 it jumped from about 0.02 to 0.5-0.7). The 100 side had one roll. | LIKELY |
 | Offside, roughing the passer, pass and run blocking | Visible as many more (or fewer) of certain rolls firing, not as a measured chance. | LIKELY |
 | Interceptions, pass coverage | Nothing visible in the logged rolls. | OPEN |
 | Fatigue, min player speed | Their slots are known; they act through curves, so no roll shows them. | OPEN |
+
+**What a stock install should do (computed from the game's code, not yet measured).** With the game's own slider curves the five
+penalty sliders (holding, clipping, face mask, pass interference, defensive holding) share one rule: the call chance is multiplied
+by 0 at slider 0, by about 0.5 at 25, by 1.0 at the default 50, and by up to about x100 above that (capped at a chance of 1.0), so
+they are steep: little room between 50 and 100. A slider-curve mod changes those numbers, which is why the measured ones above are
+larger or smaller than this.
 
 The proven rows are proven because the effect is an exact factor or an exact 0 or 1 in the logged thresholds, not because of a rate
 across many games. Other slider groups (injuries, special teams, penalty toggles) have not been tested yet.

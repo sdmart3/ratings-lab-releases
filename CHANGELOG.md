@@ -11,10 +11,11 @@ Versions: tracer (rolltrace.dll) 0.5.1, Mod Manager plugin 0.6.0, app 0.6.1.
 
 Sliders measured in real games.
 - Ten sweep games (sliders at 0 or 100, one group at a time) were read against stock games. New in the labels and the Modder's map:
-  **Fumbles is ball security, higher means fewer fumbles** (0 gives a fumble chance of exactly 1.0, 100 exactly 0; PROVEN). Holding,
-  Clipping and the face-mask / pass-interference pair scale their own foul kind of the contact-foul roll (PROVEN). Defensive holding
+  **Fumbles is ball security, higher means fewer fumbles** (PROVEN; at 0 every contact fumbled and at 100 none did, measured with a gameplay-slider mod installed). Holding,
+  Clipping and Face mask each scale their own foul kind of the contact-foul roll (PROVEN; the sizes were measured with a
+  gameplay-slider mod installed, which replaces the game's slider curves, so stock sizes differ). Defensive holding
   has no effect of its own (PROVEN). Pass defense reaction time multiplies the break-on-ball chance by x0.5 at 0 and x1.5 at 100
-  (PROVEN; that roll's label went from LIKELY to PROVEN). WR catching, QB accuracy, tackling, offside, roughing the passer and
+  (PROVEN under that same slider mod; that roll's label went from LIKELY to PROVEN). WR catching, QB accuracy, tackling, offside, roughing the passer and
   blocking are LIKELY. Interceptions and pass coverage show nothing yet.
 - The map's slider rows say how each was measured, and the map's check accepts measured sliders with a "how we know" note.
 
