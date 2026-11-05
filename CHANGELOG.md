@@ -1,5 +1,51 @@
 # Changelog
 
+## 0.6.2 (beta)
+
+A fix release: one crash fix and the roll names that the 29 October game update scrambled.
+
+Versions: tracer (rolltrace.dll) 0.5.2, Mod Manager plugin 0.6.1, app 0.6.2.
+
+Crash fix (tracer 0.5.2).
+- **What people saw:** on rare launches the game closed by itself about a minute after it started, right as Ratings Lab hooked in. It
+  needed a slow launch (the game still busy loading) to line up, so most launches never showed it.
+- **Why:** Ratings Lab keeps four small jump stubs on one memory page. To add the fourth stub it briefly took "run code" permission off
+  the whole page, even though the third stub (the curve lookup, one of the busiest functions in the game) was already live on it. If a
+  game thread called the curve lookup in that moment, Windows ended the game.
+- **What changed:** the page never loses "run code" permission while a stub on it is live. Each stub is checked before it is switched on,
+  and if anything looks wrong Ratings Lab leaves that hook out and writes a line in `rolltrace.log` instead. The search for a free page
+  next to the game's code is now capped at 2 seconds, so the hooks go in sooner and in a shorter window.
+- **How it was checked:** a new offline test runs four threads hammering the curve lookup while the DLL installs. The old DLL crashed
+  in 3 of 3 runs; the new one in none of 6 runs. The new build then ran about eight full test games in the real game with no crash.
+  It is a rare crash, so that is encouraging rather than proof.
+
+Roll names after the 29 October game update (labels).
+- The label table finds each roll by where it sits in the game's source (file line, and the order of draws on that line). The 29 October
+  update moved a few of those, so **31 roll names went blank** (about 2% of all draws). All 31 are put back under their new place.
+  Among them: passrush.deflect_aware, penalty.contact_foul_roll, defense.lbti_success, preplay.jump_snap_ai_try_roll,
+  penalty.false_start_roll and blocking.reach_tackle_attempt.
+- **1 name was wrong and is corrected.** The jump-snap timing draw had moved onto the same line as the reach-tackle attempt, so it was
+  being logged as `blocking.reach_tackle_attempt`. It is now `preplay.jump_snap_ai_timing_roll`, and the reach-tackle attempt has its own
+  entry again.
+- **1 new name:** `pass.wrap_swat_chance_roll` (LIKELY), a draw in pass plays that reach a catch, read next to the wrap-swat and strip curves.
+- Every one of the 513 draw sites the plugin finds is now named on the 29 October build. The table has 536 rows: 208 PROVEN, 278 LIKELY,
+  50 GUESS. Three re-keyed rows were set one level down (PROVEN to LIKELY): a re-keyed row keeps its old evidence only as far as it
+  was seen again on the new build, and these three were seen too rarely or behaved differently there.
+- The roll thresholds and inputs of the re-keyed rows are the ones from before the update. The code around them matched, but that is
+  checked by name and position, not by a fresh proof for each.
+
+Plugin 0.6.1.
+- New setting `armed_window` in `plugin.cfg` (a clock window such as `23:30-08:00`, local time). Ratings Lab then loads only for games
+  launched inside it. Empty (the default) means always, as before. Meant for someone who records at night only.
+- The shipped `plugin.cfg` is otherwise unchanged: `plugin_enabled = 1`, `armed_hours = 0`.
+
+Other.
+- The tracer now knows the 29 October build's code fingerprints (it logged "no expectation for this build" before; the hooks went in
+  the same way either way).
+- Known gap: the field index (which curves and knobs a roll reads) is still the mid-October one. On 29 October logs the names are complete but
+  fewer rolls show linked curves, knobs and sliders. Rebuilding the index is planned for a later release.
+- The viewer and the app are unchanged from 0.6.1 apart from the version number, so logs written by 0.6.1 open as before.
+
 ## 0.6.1 (beta)
 
 The first beta. It rolls up everything since 0.5.0 (the 0.6.0 section below was an internal integration build) and adds the exit

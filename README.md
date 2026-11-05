@@ -1,6 +1,6 @@
-# Ratings Lab 0.6.1 (beta)
+# Ratings Lab 0.6.2 (beta)
 
-**Download:** get `Ratings-Lab-0.6.1.zip` (and its `.sha256.txt`) from the [latest release](https://github.com/sdmart3/ratings-lab-releases/releases/latest). Source is not published here.
+**Download:** get `Ratings-Lab-0.6.2.zip` (and its `.sha256.txt`) from the [latest release](https://github.com/sdmart3/ratings-lab-releases/releases/latest). Source is not published here.
 
 *Ratings Lab is the new name of Roll Tracer (0.4.x). It traces more than rolls: the random draws, the rating-to-chance curves, the
 thresholds, and which ratings and sliders feed each outcome. The in-game plugin keeps the old file names (`RollTracePlugin.dll`,
@@ -19,6 +19,10 @@ It is log only. Every roll is handed back to the game unchanged, so the game pla
 **Beta.** The plugin has run full games in the real game, and the slider findings below come from real games. Read "Known limits"
 before you trust a number, and use it for offline play only.
 
+**New in 0.6.2.** It fixes a rare game crash at launch (the game could close about a minute after it started, right as Ratings Lab hooked
+in) and puts back the names of 31 rolls that went blank after the 29 October game update. Details are in the CHANGELOG. If you are on
+0.6.1 or older, update (see "Updating").
+
 ![The Modder's map: the fumbles card, with the rolls that decide it and the inputs that feed it](screenshots/3-map-fumbles-slider.png)
 ![Runs page: style, difficulty, slider hash and the mods each run was played with](screenshots/1-runs-mods.png)
 ![The comparison card: which rolls a change moved, ready to post](screenshots/5-comparison-card.png)
@@ -33,7 +37,8 @@ sliders at 0: every contact fumbles (15 of 15), against 7.5% in stock. That game
 
 - **Rolls and decisions**: every labelled roll (catch, drop, interception, fumble, tackle break, kick accuracy, penalties, block and
   pass-rush engagements and more) with how often it happens, how many rolls that is, a 95% interval, and where its threshold comes from.
-  535 draw sites are labelled: **211 PROVEN, 274 LIKELY, 50 GUESS** (see "Evidence levels").
+  536 draw sites are labelled (every one of the 513 the plugin finds in the game's code, plus 23 more it finds the first time they fire):
+  **208 PROVEN, 278 LIKELY, 50 GUESS** (see "Evidence levels").
 - **Curves and thresholds**: every tuning field and curve in the game's tuning data, with its stock value per game style, the rating
   that feeds a curve, how the game was seen to use it, and an evidence level.
 - **Player names on rolls**: a roll names the player it is about, on both teams (the log's `pgid` and `pgids` fields, and a `pgid` column
@@ -65,20 +70,23 @@ Ratings Lab\                 the app and viewer (double-click ratings-lab.cmd; r
 
 ## Requirements
 
-- College Football 27 (PC) on the game build this tool was made for (the mid-October 2026 update). On another build each part of
-  the plugin logs "NOT installed" and stands aside; nothing is changed. Logs from different builds are not joined by address.
+- College Football 27 (PC) on the game build this tool was made for (the 29 October 2026 update). The mid-October build also loads, but
+  31 roll names are keyed to the 29 October build and stay blank there. On any other build each part of the plugin logs "NOT installed"
+  and stands aside; nothing is changed. Logs from different builds are not joined by address.
 - The Mod Manager you already use to launch modded games.
-- **Node.js 20 or newer** (free, from nodejs.org) for the app. The plugin itself needs nothing extra.
+- **Node.js 20 or newer** (free, from nodejs.org) for the app. The plugin itself needs nothing extra. To check what you have, open a
+  terminal (Windows key, type `cmd`, Enter) and type `node --version`; it should print v20 or higher.
 - A web browser. About 15 MB for the package, plus the logs (see Disk use).
 
 ## Install
 
 1. Close the game and the Mod Manager.
 2. Unzip the download anywhere.
-3. Open `Manual install\Plugins`. Copy **everything in it** (`RollTracePlugin.dll` and the `RollTrace` folder) into your Mod
+3. Open `Manual install\Plugins`. (There is no installer: "Manual install" is simply the folder you copy from.) Copy **everything in it** (`RollTracePlugin.dll` and the `RollTrace` folder) into your Mod
    Manager's `Plugins` folder, the one next to `MMCModManager.exe`. Make the `Plugins` folder if it is not there.
 4. Start the Mod Manager (restart it if it was open: it reads plugins only at start) and launch the game from it as usual.
-5. About 20 seconds after the game starts the plugin loads and begins logging. Check `Plugins\RollTrace\rolltrace.log`: it has one line
+5. About 20 seconds after the game starts the plugin loads and begins logging. A file called `rolltrace-<date>-<time>-<pid>.jsonl` appears in
+   `Plugins\RollTrace` and grows while you play: that is your log. Check `Plugins\RollTrace\rolltrace.log`: it has one line
    per part, saying "installed" or "NOT installed" and why.
 
 You end up with:
@@ -90,6 +98,18 @@ You end up with:
 
 Put `Ratings Lab\` anywhere you like (it does not have to be near the game).
 
+## Updating from 0.6.1 or older
+
+Close the game and the Mod Manager, then do install step 3 again: copy everything in `Manual install\Plugins` over what is in your
+`Plugins` folder and say yes to replace. Your old logs stay where they are and still open. Two things to know:
+
+- `RollTrace\rolltrace.ini` holds your settings. If you changed anything in it, copy your own `rolltrace.ini` somewhere first and put it back
+  after (or skip that one file when Windows asks). If you never touched it, replace it.
+- `RollTrace\plugin.cfg` has a new line, `armed_window`, which you can leave empty. Empty means Ratings Lab records every game, as before.
+
+Use the `Ratings Lab` folder from this download from now on (delete or ignore the old one). Your tags and databases live in
+`%APPDATA%\RatingsLab`, so they carry over.
+
 ## Uninstall
 
 Close the game and the Mod Manager. Delete `Plugins\RollTracePlugin.dll` and the `Plugins\RollTrace` folder. To forget the app's
@@ -97,7 +117,7 @@ saved settings, tags and databases, delete `%APPDATA%\RatingsLab` (and `%APPDATA
 
 ## How to run
 
-Double-click `Ratings Lab\ratings-lab.cmd`. In one step it finds the plugin's log folder, reads the logs it has not seen, builds or
+Play a game first, then close the game. Then double-click `Ratings Lab\ratings-lab.cmd`. In one step it finds the plugin's log folder, reads the logs it has not seen, builds or
 updates the analysis database, starts a private viewer on your own PC and opens it in your browser. Close its window to stop it.
 
 If it cannot find the log folder, the viewer's **Folders** page has "Choose..." and "Check again". From a terminal:
@@ -206,7 +226,10 @@ across many games. Other slider groups (injuries, special teams, penalty toggles
 
 ## Known limits
 
-- **Beta.** The plugin ran full games in the real game; the player names, mod list and label table passed there. The exit fix (the log
+- **Beta.** The plugin ran full games in the real game; the player names, mod list and label table passed there. The launch-crash fix
+  of 0.6.2 ran about eight full test games in a row without a crash; it is a rare crash, so a few games cannot prove it is gone for good.
+  If the game closes by itself around the time Ratings Lab loads, set `plugin_enabled = 0` in `Plugins\RollTrace\plugin.cfg` and report it.
+  The exit fix (the log
   now ends with its exit summary when the game closes itself) is tested offline against a dummy process; confirmation in the real game
   is still to come. A log without the exit line is shown as "in progress" and still reads fine.
 - **Not every decision has one roll.** Each label is PROVEN, LIKELY or GUESS, and the viewer shows which. Fumble, catch resolution,
@@ -223,12 +246,19 @@ across many games. Other slider groups (injuries, special teams, penalty toggles
   unnamed. The viewer does not show names on its pages; they are in the logs, the roll CSV export and share packs.
 - **Sliders in the Modder's map** are PROVEN, LIKELY or still "predicted", as the page says. A slider marked predicted has not been tested.
 - **No per-field "was it read" tracing.** Field evidence comes from the curve log, the roll thresholds, and a static scan of the game.
+- **Curve and knob links are fuller on older logs.** The field index (which curves and knobs a roll reads) was built on the mid-October game build.
+  On logs from the 29 October build the roll names are complete, but fewer rolls show their linked curves, knobs and
+  sliders, and the roll pages show less about the code around them. Rebuilding the index for the new build is planned.
 - **Not covered:** the separate Super Sim engine that dynasty mode uses for games nobody plays.
-- The plugin is tied to the game build (the mid-October 2026 update). A game update can move the code it looks for; it then stands
-  aside until the tool is updated.
+- The plugin is tied to the game build (the 29 October 2026 update). A game update can move the code it looks for; it then stands
+  aside until the tool is updated. A game update can also shift which draw is which: the roll names are matched to the game's code, so
+  after an update some names may be blank until the label table is updated (that is what happened to 31 names in 0.6.1).
 
 ## Troubleshooting
 
+- **The game closes by itself soon after it starts.** Set `plugin_enabled = 0` in `Plugins\RollTrace\plugin.cfg`, start the game once
+  to confirm it is stable without Ratings Lab, and report it (send `rolltrace.log` and `plugin.log`). 0.6.2 fixes the one cause we know, but
+  this is the first place to look if it happens again.
 - **No logs appear.** Close the game and the Mod Manager, check that `RollTracePlugin.dll` sits directly in `Plugins` with the
   `RollTrace` folder beside it, restart the Mod Manager (it only loads plugins at start), then launch from the Mod Manager. Wait 20
   seconds after the game window shows. `Plugins\RollTrace\plugin.log` and `rolltrace.log` say what happened. Antivirus can
